@@ -35,6 +35,7 @@ Start 5 dp:
 
 Each dp will enter the critical section after all are started.
 
+
 View each dp in the ring:
 
 ./dpClient relayAttributes --dpStartAddress=localhost:8080
@@ -53,6 +54,7 @@ localhost:8083   4   2   L: localhost:8082   R: localhost:8084   M:     3796
 localhost:8082   3   3   L: localhost:8081   R: localhost:8083   M:     3799
 
 localhost:8081   2   4   L: localhost:8080   R: localhost:8082   M:     3931
+
 
 Start a new dp:
 ./dp addToRing --addressOfDp=localhost:8085 --dpNumber=6 --debugStdout=true
@@ -82,6 +84,7 @@ Done: true
 
 Result: Added new DP successfully
 
+
 View dps in ring:
 
 ./dpClient relayAttributes --dpStartAddress=localhost:8080 
@@ -101,6 +104,7 @@ localhost:8085   6   3   L: localhost:8082   R: localhost:8083   M:     1247
 localhost:8082   3   4   L: localhost:8081   R: localhost:8085   M:     98038
 
 localhost:8081   2   5   L: localhost:8080   R: localhost:8082   M:     98856
+
 
 Remove a dp:
 
@@ -127,6 +131,7 @@ LeftAddress of Forwarder: localhost:8084
 Done: true
 
 Result: Removed dp successfully
+
 
 View dps in ring:
 
@@ -221,6 +226,7 @@ One of the motivations behind a multi-process ring of dp is that one of the host
 
 have a unique resource valuable  to dp running on other hosts.  
 
+
 Here in this code there is a data heap on each dp that stores strings:
 
 ./dpClient relayStoreDataOnDp --addressOfDpToForwardRequest=localhost:8080 --numberOfDpThatStoresData=4 --dataToStore="The quick brown fox jumped over the lazy dog's back."
@@ -242,6 +248,7 @@ ResultMessage: Data stored no problem.
 StoreOrRetrieve: store
 
 Data: 
+
 
 Retrieve data:
 
