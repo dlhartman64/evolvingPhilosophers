@@ -13,6 +13,7 @@ side. Similar with removal.  Dijkstra's algorithm is used.
 The dp binary is the dp, and the dpClient binary is used to send commands to the dp.
 
 Build the binaries:
+
 go build -ldflags '-extldflags "-static"' dp.go
 
 go build -ldflags '-extldflags "-static"' dpClient.go
