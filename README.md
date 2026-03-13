@@ -24,9 +24,13 @@ Enter ./do <command> or ./dpClient <command> to get the options for the commands
 Start 5 dp:
 
 ./dp initialRing --addressOfDp=localhost:8080 --addressOfDpOnLeft=localhost:8084 --addressOfDpOnRight=localhost:8081 --dpNumber=1 --debugStdout=true
+
 ./dp initialRing --addressOfDp=localhost:8081 --addressOfDpOnLeft=localhost:8080 --addressOfDpOnRight=localhost:8082 --dpNumber=2 --debugStdout=true
+
 ./dp initialRing --addressOfDp=localhost:8082 --addressOfDpOnLeft=localhost:8081 --addressOfDpOnRight=localhost:8083 --dpNumber=3 --debugStdout=true
+
 ./dp initialRing --addressOfDp=localhost:8083 --addressOfDpOnLeft=localhost:8082 --addressOfDpOnRight=localhost:8084 --dpNumber=4 --debugStdout=true
+
 ./dp initialRing --addressOfDp=localhost:8084 --addressOfDpOnLeft=localhost:8083 --addressOfDpOnRight=localhost:8080 --dpNumber=5 --debugStdout=true
 
 Each dp will enter the critical section after all are started.
