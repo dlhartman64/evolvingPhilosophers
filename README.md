@@ -14,6 +14,7 @@ The dp binary is the dp, and the dpClient binary is used to send commands to the
 
 Build the binaries:
 go build -ldflags '-extldflags "-static"' dp.go
+
 go build -ldflags '-extldflags "-static"' dpClient.go
 
 Enter ./dp or ./dpClient to get a list of commands.
