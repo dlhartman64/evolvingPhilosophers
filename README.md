@@ -273,7 +273,7 @@ Data: The quick brown fox jumped over the lazy dog's back.
 dpClient commands that begin with the word "relay" specify a dp that receives 
 the request and forwards it through the ring.
 
-dpClient commands that begin with the work "direct" contact a single dp.
+dpClient commands that begin with the word "direct" contact and make a request of a single dp.
 
 
 
