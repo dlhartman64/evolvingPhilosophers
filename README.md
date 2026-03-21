@@ -51,6 +51,7 @@ localhost:8082     dpNumber: 3   S: 3   L: localhost:8081   R: localhost:8083   
 localhost:8081     dpNumber: 2   S: 4   L: localhost:8080   R: localhost:8082   Iter: 2280
 
 
+
 Start a new dp:
 ./diningPhilosopher addToRing --addressOfDp=localhost:8085 --dpNumber=6 --debugStdout=true
 
