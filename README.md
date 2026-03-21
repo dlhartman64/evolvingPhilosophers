@@ -19,6 +19,7 @@ Enter ./diningPhilosopher or ./dpClient to get a list of commands.
 
 Enter ./diningPhilosopher <command> or ./dpClient <command> to get the options for the commands
 
+*
 
 Start 5 diningPhilosopher:
 
@@ -34,6 +35,7 @@ Start 5 diningPhilosopher:
 
 Each diningPhilosopher will enter the critical section after all are started.
 
+*
 
 View each diningPhilosopher in the ring:
 
@@ -51,7 +53,7 @@ localhost:8082     dpNumber: 3   S: 3   L: localhost:8081   R: localhost:8083   
 
 localhost:8081     dpNumber: 2   S: 4   L: localhost:8080   R: localhost:8082   Iter: 2280
 
-
+*
 
 Start a new dp:
 ./diningPhilosopher addToRing --addressOfDp=localhost:8085 --dpNumber=6 --debugStdout=true
@@ -69,10 +71,11 @@ NewDpAddress: localhost:8085
 
 Done: true
 
-Result: Added new DP successfully
+Result: Added new diningPhilosopher successfully
 
+*
 
-View diningPhilosopher in ring:
+View each diningPhilosopher in ring:
 
 ./dpClient relayAttributes --dpStartAddress=localhost:8080
 
@@ -90,7 +93,7 @@ localhost:8082     dpNumber: 3   S: 4   L: localhost:8081   R: localhost:8085   
 
 localhost:8081     dpNumber: 2   S: 5   L: localhost:8080   R: localhost:8082   Iter: 10063
 
-
+*
 
 Remove a diningPhilosopher:
 
@@ -124,7 +127,7 @@ localhost:8085     dpNumber: 6   S: 3   L: localhost:8081   R: localhost:8083   
 
 localhost:8081     dpNumber: 2   S: 4   L: localhost:8080   R: localhost:8085   Iter: 11983
 
-
+*
 
 Each diningPhilosopher has a ring buffer to store log messages.
 
@@ -190,6 +193,7 @@ index: 1,  6, 2026-03-16 01:05:54, I, Quiesce1Left, address: localhost:8085, lef
 
 index: 0,  6, 2026-03-16 01:04:32, I, DeQuiesce3, address: localhost:8085, left: localhost:8082, right: localhost:8083, 
 
+*
 
 One of the motivations behind a multi-process ring of dp is that one of the hosts might 
 have a unique resource valuable  to dp running on other hosts.  
@@ -207,6 +211,7 @@ ResultMessage: Data stored no problem.
 StoreOrRetrieve: store
 Data: 
 
+*
 
 Retrieve data:
 
@@ -222,6 +227,7 @@ StoreOrRetrieve: retrieve
 
 Data: The quick brown fox jumped over the lazy dog's back.
 
+*
 
 dpClient commands that begin with the word "relay" specify a dp that receives 
 the request and forwards it through the ring.
