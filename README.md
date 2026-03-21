@@ -34,6 +34,7 @@ Start 5 diningPhilosopher:
 
 Each diningPhilosopher will enter the critical section after all are started.
 
+
 View each diningPhilosopher in the ring:
 
 ./dpClient relayAttributes --dpStartAddress=localhost:8080
