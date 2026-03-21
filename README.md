@@ -4,18 +4,19 @@ The Evolving Philosophers problem makes it posible to add new dining philosopher
 affecting entry into the critical section of each dining philosoper.  Each dining
 philosopher here is a process, and the communication is REST.
 
-The design here is based on the paper "The Evolving Philosophers Problem:
-Dynamic Change Management" by Jeff Kramer and Jeff Magee.  4 dining philosophers, 
-referred to here as dps, are put in quiesent states, and a new diningPhilosopher is added with 2 on each
+The design is based on the paper "The Evolving Philosophers Problem:
+Dynamic Change Management" by Jeff Kramer and Jeff Magee.  4 dining philosophers are put in quiesent states, and a new diningPhilosopher is added with 2 diningPhilosophera on each
 side. Similar with removal.  Dijkstra's algorithm is used.
 
 dpClient binary is used to send commands to a diningPhilosopher.
 
 Build the binaries:
 go build -ldflags '-extldflags "-static"' diningPhilosopher.go
+
 go build -ldflags '-extldflags "-static"' dpClient.go
 
 Enter ./diningPhilosopher or ./dpClient to get a list of commands.
+
 Enter ./diningPhilosopher <command> or ./dpClient <command> to get the options for the commands
 
 
@@ -31,9 +32,9 @@ Start 5 diningPhilosopher:
 
 ./diningPhilosopher initialRing --addressOfDp=localhost:8084 --addressOfDpOnLeft=localhost:8083 --addressOfDpOnRight=localhost:8080 --dpNumber=5 --debugStdout=true
 
-Each dp will enter the critical section after all are started.
+Each diningPhilosopher will enter the critical section after all are started.
 
-View each dp in the ring:
+View each diningPhilosopher in the ring:
 
 ./dpClient relayAttributes --dpStartAddress=localhost:8080
 
@@ -86,15 +87,23 @@ localhost:8085     dpNumber: 6   S: 3   L: localhost:8082   R: localhost:8083   
 localhost:8082     dpNumber: 3   S: 4   L: localhost:8081   R: localhost:8085   Iter: 9778
 
 localhost:8081     dpNumber: 2   S: 5   L: localhost:8080   R: localhost:8082   Iter: 10063
+
+
+
 Remove a diningPhilosopher:
 
 ./dpClient relayRemoveDp --addressOfDpToForwardRequest=localhost:8080 --numberOfDpToForwardRequest=1 --numberOfDpToRemove=3
 
 Return status for relayRemoveDp: 200
+
 Forwarder DpNumber: 1
+
 DpNumberToBeRemoved: 3
+
 LeftAddress of Forwarder: localhost:8084
+
 Done: true
+
 Result: Removed dp successfully
 
 View dps in ring:
@@ -114,7 +123,8 @@ localhost:8085     dpNumber: 6   S: 3   L: localhost:8081   R: localhost:8083   
 localhost:8081     dpNumber: 2   S: 4   L: localhost:8080   R: localhost:8085   Iter: 11983
 
 
-Each dp has a ring buffer to store log messages.
+
+Each diningPhilosopher has a ring buffer to store log messages.
 
 ./dpClient relayRequestLogEntries --addressOfDpToForwardRequest=localhost:8080
 
@@ -181,7 +191,8 @@ index: 0,  6, 2026-03-16 01:04:32, I, DeQuiesce3, address: localhost:8085, left:
 
 One of the motivations behind a multi-process ring of dp is that one of the hosts might 
 have a unique resource valuable  to dp running on other hosts.  
-Here in this code there is a data heap on each dp that stores strings:
+There is a data heap on each diningPhilosopher to illustrate this that stores strings:
+
 
 ./dpClient relayStoreDataOnDp --addressOfDpToForwardRequest=localhost:8080 --numberOfDpThatStoresData=4 --dataToStore="The quick brown fox jumped over the lazy dog's back."
 
@@ -213,7 +224,7 @@ Data: The quick brown fox jumped over the lazy dog's back.
 dpClient commands that begin with the word "relay" specify a dp that receives 
 the request and forwards it through the ring.
 
-dpClient commands that begin with the work "direct" contact a single dp.
+dpClient commands that begin with the work "direct" can connect and send a request, to any diningPhilosopher in the ring, and receive the reply from that diningPhilosopher.
 
 
 
