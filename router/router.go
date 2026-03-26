@@ -44,6 +44,7 @@ func RegisterRoutes(mux *http.ServeMux, f *handler.Facilitator) {
 	mux.HandleFunc("/requestDpMessagesRelay", f.RequestDpMessagesRelay)
 	mux.HandleFunc("/dpMessagesRelayHandler", f.DpMessagesRelayHandler)
 	mux.HandleFunc("/requestDpMessagesFromSingleDp", f.RequestDpMessagesFromSingleDp)
+	mux.HandleFunc("/dataStorageHeapResponseRelay", f.DataStorageHeapResponseRelay)
 
 	// log message from another dp
 	mux.HandleFunc("/requestToLogMessage", f.RequestToLogMessage)

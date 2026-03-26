@@ -79,7 +79,8 @@ type DpMessagesRelay struct {
 	DpMessagesMap      map[string]*ringBuffer.RingBuffer `dpmessagesmap:"string"`
 }
 
-type ResourceResponseChannel chan messageServerStack.ClientMessage
+type DataHeapChannel chan messageServerStack.ClientMessage
+type DataHeapRequestChannel chan messageServerStack.ClientMessage
 type DpAttriburesResponseChannel chan DpAttributesCurrent
 type ReceiveRequestToAddNewDPChannel chan InformationToAddNewDp
 type ReceiveRequestToRemoveDPChannel chan InformationToRemoveDp

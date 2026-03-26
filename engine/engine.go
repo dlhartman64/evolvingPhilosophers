@@ -184,19 +184,18 @@ func (ef *EngineFacilitator) DpEngine(wg *sync.WaitGroup) {
 		if globalData.DpEngineMutex.TryLock() {
 			requestToProcess, _ := globalData.RequestsToProcess.Pop()
 			if requestToProcess != nil {
-				if requestToProcess.StoreOrRetrieve == "store" {
+				switch requestToProcess.StoreOrRetrieve {
+				case "store":
 					// use dataStorageHeap
 					ctimeSpec := st.Ctimespec
 					globalData.DataMessageHeap.Push(&dataStorageHeap.DataStorage{Ctime: ctimeSpec.Sec, Data: requestToProcess.Data})
-
 					// send response about successful storage of the data to a continuously
 					// running go function via a channel
 					requestToProcess.ResultMessage = "Data stored no problem."
 					requestToProcess.Data = ""
-					ef.ResourceResponseChannel <- *requestToProcess
-				}
-
-				if requestToProcess.StoreOrRetrieve == "retrieve" {
+					requestToProcess.Done = "true"
+					ef.DataHeapChannel <- *requestToProcess
+				case "retrieve":
 					var output *dataStorageHeap.DataStorage
 					var valueFromHeap any
 					valueFromHeap = globalData.DataMessageHeap.Pop()
@@ -208,7 +207,8 @@ func (ef *EngineFacilitator) DpEngine(wg *sync.WaitGroup) {
 						requestToProcess.ResultMessage = "Data retrieved"
 						requestToProcess.Data = output.Data
 					}
-					ef.ResourceResponseChannel <- *requestToProcess
+					requestToProcess.Done = "true"
+					ef.DataHeapChannel <- *requestToProcess
 				}
 			}
 			globalData.DpEngineMutex.Unlock()

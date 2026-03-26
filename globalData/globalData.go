@@ -23,8 +23,6 @@ var DpEngineMutex sync.Mutex
 
 var TestMutex sync.Mutex
 
-var DpAttributesRelayHandlerMutex sync.Mutex
-
 var DpMessagesRelayHandlerMutex sync.Mutex
 
 var DataMessageHeap *dataStorageHeap.DataStorageHeap

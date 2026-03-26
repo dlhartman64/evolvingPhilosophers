@@ -1039,7 +1039,6 @@ func (f *Facilitator) DpAttributesRelay(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// globalData.DpAttributesRelayHandlerMutex.Lock()
 getattributes:
 	if f.DpStates.State != Quiesce1 && f.DpStates.State != Quiesce2 && f.DpStates.State != Quiesce3 {
 		currentSequenceNumberInt := previousSequenceNumberInt + 1
@@ -1057,7 +1056,6 @@ getattributes:
 	} else {
 		goto getattributes
 	}
-	// globalData.DpAttributesRelayHandlerMutex.Unlock()
 
 	err = f.RelayDpAttributesRequest(dpAttributesRelay)
 	if err != nil {
@@ -1125,9 +1123,7 @@ func (f *Facilitator) RequestDpAttributesRelay(w http.ResponseWriter, r *http.Re
 		},
 	}
 
-	// globalData.DpAttributesRelayHandlerMutex.Lock()
 	err := f.RelayDpAttributesRequest(currentAttributes)
-	// globalData.DpAttributesRelayHandlerMutex.Unlock()
 	if err != nil {
 		f.LogMessage("C", "RequestDpAttributesRelay,  requestDpAttributesRelay failure", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -1204,7 +1200,6 @@ func (f *Facilitator) DpResourceRelay(w http.ResponseWriter, r *http.Request) {
 
 	if clientMessage.ResourceDpNumber == f.DpNumber {
 		globalData.DpEngineMutex.Lock()
-		clientMessage.Done = "true"
 		globalData.RequestsToProcess.Push(clientMessage)
 		globalData.DpEngineMutex.Unlock()
 		w.WriteHeader(http.StatusOK)
@@ -1212,26 +1207,18 @@ func (f *Facilitator) DpResourceRelay(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if clientMessage.OriginatorAddress == f.OwnAddress {
-		switch clientMessage.Done {
-		case "true":
-			f.LogMessage("I", "DpResourceRelay, the retrieve or store response has been completed", nil)
-		case "false":
-			msg := fmt.Sprintf("DpResourceRelay, the target dp, %s, does not exist", clientMessage.ResourceDpNumber)
-			f.LogMessage("I", msg, nil)
-			clientMessage.ResultMessage = msg
-			clientMessage.Data = ""
-		}
-		f.ResourceResponseChannel <- clientMessage
+		msg := fmt.Sprintf("DpResourceRelay, the target dp, %s, does not exist", clientMessage.ResourceDpNumber)
+		f.LogMessage("I", msg, nil)
+		clientMessage.ResultMessage = msg
+		clientMessage.Data = ""
+		// }
+		f.DataHeapRequestChannel <- clientMessage
 		w.WriteHeader(http.StatusOK)
 		return
 	}
 
-	err = f.RelayDpResourceInformation(clientMessage)
-	if err != nil {
-		f.LogMessage("C", "DpResourceRelay, relayDpResourceInformation failure", err)
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
+	go f.RelayDpResourceInformation(clientMessage)
+
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -1388,26 +1375,21 @@ func (f *Facilitator) StoreOrRequestDpResourceInformation(w http.ResponseWriter,
 		Data:              dpResourceInformation.Data,
 	}
 
+	var response messageServerStack.ClientMessage
+
 	if requestToProcess.ResourceDpNumber == f.DpNumber {
 		globalData.DpEngineMutex.Lock()
 		globalData.RequestsToProcess.Push(requestToProcess)
 		globalData.DpEngineMutex.Unlock()
-		requestToProcess.Done = "true"
-		requestToProcess.ResultMessage = "receiver of request processed the data"
-		f.ResourceResponseChannel <- requestToProcess
 	} else {
-		// if the forwarding of the request failed, DO return an error message to the client/requestor
-		// since this is not the dp with the resource, send on the request to the dp on the left
-		err = f.RelayDpResourceInformation(requestToProcess)
-		if err != nil {
-			f.LogMessage("C", "StoreOrRequestDpResourceInformation, relayDpResourceInformation failed", err)
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
+		go f.RelayDpResourceInformation(requestToProcess)
 	}
 
-	var response messageServerStack.ClientMessage
-	response = <-f.ResourceResponseChannel
+	select {
+	case response = <-f.DataHeapRequestChannel:
+	case <-time.After(5 * time.Second):
+		response.ResultMessage = "store or retrieve data failer, timed out after 5 seconds"
+	}
 
 	jsonData, err := json.Marshal(response)
 	if err != nil {
@@ -1488,4 +1470,26 @@ func (f *Facilitator) RequestToLogMessage(w http.ResponseWriter, r *http.Request
 		foreignLogMessage.SenderDpNumber, foreignLogMessage.SenderAddress, foreignLogMessage.Message)
 
 	f.LogMessage(foreignLogMessage.Severity, message, foreignLogMessage.ForeignErr)
+}
+
+func (f *Facilitator) DataStorageHeapResponseRelay(w http.ResponseWriter, r *http.Request) {
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		f.LogMessage("C", "DataStorageHeapResponseRelay, ReadAll body failure", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	defer r.Body.Close()
+
+	var dataStorageHeapResponse messageServerStack.ClientMessage
+	err = json.Unmarshal(body, &dataStorageHeapResponse)
+	if err != nil {
+		f.LogMessage("C", "DataStorageHeapResponseRelay, Unmarshal failure", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	go f.SendDataStorageHeapReplyToOriginator(dataStorageHeapResponse)
 }

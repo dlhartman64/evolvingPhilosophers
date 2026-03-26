@@ -27,7 +27,8 @@ type Facilitator struct {
 	EnterData                       string
 	GetData                         string
 	ResourceType                    string
-	ResourceResponseChannel         ResourceResponseChannel
+	DataHeapChannel                 DataHeapChannel
+	DataHeapRequestChannel          DataHeapRequestChannel
 	DpAttributesResponseChannel     DpAttriburesResponseChannel
 	ReceiveRequestToAddNewDPChannel ReceiveRequestToAddNewDPChannel
 	ReceiveRequestToRemoveDPChannel ReceiveRequestToRemoveDPChannel
@@ -71,7 +72,8 @@ func NewFacilitator(ownAddress string, leftAddress string, rightAddress string,
 	getData := "false"
 	resourceType := ""
 
-	resourceResponseChannel := make(chan messageServerStack.ClientMessage, 100)
+	dataHeapChannel := make(chan messageServerStack.ClientMessage, 100)
+	dataHeapRequestChannel := make(chan messageServerStack.ClientMessage, 100)
 	dpAttributesResponseChannel := make(chan DpAttributesCurrent, 100)
 	receiveRequestToAddNewDpChannel := make(chan InformationToAddNewDp, 100)
 	receiveRequestToRemoveDPChannel := make(chan InformationToRemoveDp, 100)
@@ -99,7 +101,8 @@ func NewFacilitator(ownAddress string, leftAddress string, rightAddress string,
 		EnterData:                       enterData,
 		GetData:                         getData,
 		ResourceType:                    resourceType,
-		ResourceResponseChannel:         resourceResponseChannel,
+		DataHeapChannel:                 dataHeapChannel,
+		DataHeapRequestChannel:          dataHeapRequestChannel,
 		DpAttributesResponseChannel:     dpAttributesResponseChannel,
 		ReceiveRequestToAddNewDPChannel: receiveRequestToAddNewDpChannel,
 		ReceiveRequestToRemoveDPChannel: receiveRequestToRemoveDPChannel,

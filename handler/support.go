@@ -26,13 +26,11 @@ func (f *Facilitator) CollectAndForwardResourceData(wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
-		response = <-f.ResourceResponseChannel
 
-		// send this data to the resource data relay handler
-		err := f.RelayDpResourceInformation(response)
-		if err != nil {
-			f.LogMessage("W", "collectAndForwardResourceData, relayDpResourceInformation failed", err)
-		}
+		response = <-f.DataHeapChannel
+
+		go f.SendDataStorageHeapReplyToOriginator(response)
+
 	}
 }
 
@@ -148,7 +146,6 @@ func (f *Facilitator) AddEndOfLineData(unreachableAddress string, dpAttributesRe
 		return nil, err
 	}
 
-	// globalData.DpAttributesRelayHandlerMutex.Lock()
 	currentSequenceNumberInt := previousSequenceNumberInt + 1
 	currentSequenceNumber := strconv.Itoa(currentSequenceNumberInt)
 	dpAttributesRelay.PreviousSequenceNumber = currentSequenceNumber
@@ -162,7 +159,6 @@ func (f *Facilitator) AddEndOfLineData(unreachableAddress string, dpAttributesRe
 		Iteration:      -1,
 		Message:        "refused connection",
 	}
-	// globalData.DpAttributesRelayHandlerMutex.Unlock()
 
 	return &dpAttributesRelay, nil
 }

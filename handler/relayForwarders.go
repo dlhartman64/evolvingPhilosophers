@@ -44,6 +44,47 @@ func (f *Facilitator) RelayDpResourceInformation(requestToProcess messageServerS
 	return nil
 }
 
+// *
+// SendDataStorageHeapReplyToOriginator
+// *
+func (f *Facilitator) SendDataStorageHeapReplyToOriginator(dataStorageHeapResponse messageServerStack.ClientMessage) error {
+
+	if dataStorageHeapResponse.OriginatorAddress == f.OwnAddress {
+		f.DataHeapRequestChannel <- dataStorageHeapResponse
+		return nil
+	}
+
+	jsonData, err := json.Marshal(dataStorageHeapResponse)
+	if err != nil {
+		f.LogMessage("C", "SendDataStorageHeapReplyToOriginator, Marshal failure", err)
+		functionErr := NewForwardError(f.LeftAddress, f.OwnAddress, "SendDataStorageHeapReplyToOriginator", "Failed to marshal request", err.Error())
+		return functionErr
+	}
+
+	requestUrl := fmt.Sprintf("http://%s/dataStorageHeapResponseRelay", f.LeftAddress)
+	request, err := http.NewRequest("POST", requestUrl, bytes.NewBuffer(jsonData))
+	if err != nil {
+		f.LogMessage("C", "SendDataStorageHeapReplyToOriginator, build POST request failure", err)
+		functionErr := NewForwardError(f.LeftAddress, f.OwnAddress, "SendDataStorageHeapReplyToOriginator", "failed to build POST request", err.Error())
+		return functionErr
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		f.LogMessage("C", "SendDataStorageHeapReplyToOriginator, failed to send  POST request", err)
+		functionErr := NewForwardError(f.LeftAddress, f.OwnAddress, "SendDataStorageHeapReplyToOriginator", "failed to send  POST request", err.Error())
+		return functionErr
+	}
+
+	defer response.Body.Close()
+	return nil
+}
+
+// *
+// RelayDpAttributesRequest
+// *
 func (f *Facilitator) RelayDpAttributesRequest(currentAttributes DpAttributesRelay) error {
 
 	jsonData, err := json.Marshal(currentAttributes)
