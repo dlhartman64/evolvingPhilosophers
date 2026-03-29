@@ -23,15 +23,15 @@ Enter ./diningPhilosopher <command> or ./dpClient <command> to get the options f
 
 Start 5 diningPhilosopher:
 
-./diningPhilosopher initialRing --addressOfDp=localhost:8080 --addressOfDpOnLeft=localhost:8084 --addressOfDpOnRight=localhost:8081 --dpNumber=1 --debugStdout=true
+./diningPhilosopher initialRing --addressOfDp=localhost:8080 --addressOfDpOnLeft=localhost:8084 --addressOfDpOnRight=localhost:8081 --dpNumber=1 --detachFromTerminal=true
 
-./diningPhilosopher initialRing --addressOfDp=localhost:8081 --addressOfDpOnLeft=localhost:8080 --addressOfDpOnRight=localhost:8082 --dpNumber=2 --debugStdout=true
+./diningPhilosopher initialRing --addressOfDp=localhost:8081 --addressOfDpOnLeft=localhost:8080 --addressOfDpOnRight=localhost:8082 --dpNumber=2 --detachFromTerminal=true
 
-./diningPhilosopher initialRing --addressOfDp=localhost:8082 --addressOfDpOnLeft=localhost:8081 --addressOfDpOnRight=localhost:8083 --dpNumber=3 --debugStdout=true
+./diningPhilosopher initialRing --addressOfDp=localhost:8082 --addressOfDpOnLeft=localhost:8081 --addressOfDpOnRight=localhost:8083 --dpNumber=3 --detachFromTerminal=true
 
-./diningPhilosopher initialRing --addressOfDp=localhost:8083 --addressOfDpOnLeft=localhost:8082 --addressOfDpOnRight=localhost:8084 --dpNumber=4 --debugStdout=true
+./diningPhilosopher initialRing --addressOfDp=localhost:8083 --addressOfDpOnLeft=localhost:8082 --addressOfDpOnRight=localhost:8084 --dpNumber=4 --detachFromTerminal=true
 
-./diningPhilosopher initialRing --addressOfDp=localhost:8084 --addressOfDpOnLeft=localhost:8083 --addressOfDpOnRight=localhost:8080 --dpNumber=5 --debugStdout=true
+./diningPhilosopher initialRing --addressOfDp=localhost:8084 --addressOfDpOnLeft=localhost:8083 --addressOfDpOnRight=localhost:8080 --dpNumber=5 --detachFromTerminal=true
 
 Each diningPhilosopher will enter the critical section after all are started.
 
@@ -56,7 +56,7 @@ localhost:8081     dpNumber: 2   S: 4   L: localhost:8080   R: localhost:8082   
 *
 
 Start a new dp:
-./diningPhilosopher addToRing --addressOfDp=localhost:8085 --dpNumber=6 --debugStdout=true
+./diningPhilosopher addToRing --addressOfDp=localhost:8085 --dpNumber=6 --detachFromTerminal=true
 
 Add to ring:
 ./dpClient relayAddNewDpToLeftOfTarget --addressOfDpToForwardRequest=localhost:8080 --numberOfDpToForwardRequest=1 --numberOfTargetDp=4 --addressOfNewDp=localhost:8085
