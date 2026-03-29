@@ -17,7 +17,7 @@ go build -ldflags '-extldflags "-static"' dpClient.go
 
 Enter ./diningPhilosopher or ./dpClient to get a list of commands.
 
-Enter ./diningPhilosopher <command> or ./dpClient <command> to get the options for the commands
+Enter ./diningPhilosopher {command} or ./dpClient {command} to get the options for the commands
 
 *
 
