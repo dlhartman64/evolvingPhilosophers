@@ -232,7 +232,7 @@ Data: The quick brown fox jumped over the lazy dog's back.
 dpClient commands that begin with the word "relay" specify a dp that receives 
 the request and forwards it through the ring.
 
-dpClient commands that begin with the work "direct" can connect and send a request, to any diningPhilosopher in the ring, and receive the reply from that diningPhilosopher.
+dpClient commands that begin with the word "direct" can connect and send a request, to any diningPhilosopher in the ring, and receive the reply from that diningPhilosopher.
 
 
 
