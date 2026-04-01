@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"sync"
-	"syscall"
 	"time"
 
 	"evolvingPhilosophers.local/dataStorageHeap"
@@ -118,7 +117,6 @@ func (ef *EngineFacilitator) putForks() error {
 // *
 func (ef *EngineFacilitator) DpEngine(wg *sync.WaitGroup) {
 	globalData.DataMessageHeap = &dataStorageHeap.DataStorageHeap{}
-	var st syscall.Stat_t
 	defer wg.Done()
 	i := 0
 	for {
@@ -187,8 +185,7 @@ func (ef *EngineFacilitator) DpEngine(wg *sync.WaitGroup) {
 				switch requestToProcess.StoreOrRetrieve {
 				case "store":
 					// use dataStorageHeap
-					ctimeSpec := st.Ctimespec
-					globalData.DataMessageHeap.Push(&dataStorageHeap.DataStorage{Ctime: ctimeSpec.Sec, Data: requestToProcess.Data})
+					globalData.DataMessageHeap.Push(&dataStorageHeap.DataStorage{Ctime: time.Now(), Data: requestToProcess.Data})
 					// send response about successful storage of the data to a continuously
 					// running go function via a channel
 					requestToProcess.ResultMessage = "Data stored no problem."
