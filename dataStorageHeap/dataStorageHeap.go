@@ -1,7 +1,9 @@
 package dataStorageHeap
 
+import "time"
+
 type DataStorage struct {
-	Ctime int64
+	Ctime time.Time
 	Data  string
 }
 
@@ -9,7 +11,7 @@ type DataStorageHeap []*DataStorage
 
 func (dsh DataStorageHeap) Len() int { return len(dsh) }
 
-func (dsh DataStorageHeap) Less(i, j int) bool { return dsh[i].Ctime < dsh[j].Ctime }
+func (dsh DataStorageHeap) Less(i, j int) bool { return dsh[i].Ctime.Before(dsh[j].Ctime) }
 
 func (dsh DataStorageHeap) Swap(i, j int) { dsh[i], dsh[j] = dsh[j], dsh[i] }
 
