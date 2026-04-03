@@ -234,5 +234,34 @@ the request and forwards it through the ring.
 
 dpClient commands that begin with the word "direct" can connect and send a request, to any diningPhilosopher in the ring, and receive the reply from that diningPhilosopher.
 
+*
+
+Here is an example 5 diningPhilosophers each running on a different host.
+
+./diningPhilosopher initialRing --addressOfDp=172.31.69.1:8080 --addressOfDpOnLeft=172.31.75.147:8080 --addressOfDpOnRight=172.31.65.185:8080 --dpNumber=1 --detachFromTerminal=true
+
+./diningPhilosopher initialRing --addressOfDp=172.31.65.185:8080 --addressOfDpOnLeft=172.31.69.1:8080 --addressOfDpOnRight=172.31.76.107:8080 --dpNumber=2 --detachFromTerminal=true
+
+./diningPhilosopher initialRing --addressOfDp=172.31.76.107:8080 --addressOfDpOnLeft=3.237.35.222:8080 --addressOfDpOnRight=172.31.69.17:8080 --dpNumber=3 --detachFromTerminal=true
+
+./diningPhilosopher initialRing --addressOfDp=172.31.69.17:8080 --addressOfDpOnLeft=172.31.76.107:8080 --addressOfDpOnRight=172.31.75.147:8080 --dpNumber=4 --detachFromTerminal=true
+
+./diningPhilosopher initialRing --addressOfDp=172.31.75.147:8080 --addressOfDpOnLeft=172.31.69.17:8080 --addressOfDpOnRight=172.31.69.1:8080 --dpNumber=5 --detachFromTerminal=true
+
+
+./dpClient relayAttributes --dpStartAddress=172.31.69.1:8080
+
+dp address, dp number, sequence, left address, right address, iteration
+
+172.31.69.1:8080     dpNumber: 1   S: 0   L: 172.31.75.147:8080   R: 172.31.65.185:8080   Iter: 7390
+
+172.31.75.147:8080     dpNumber: 5   S: 1   L: 172.31.69.17:8080   R: 172.31.69.1:8080   Iter: 6858
+
+172.31.69.17:8080     dpNumber: 4   S: 2   L: 172.31.76.107:8080   R: 172.31.75.147:8080   Iter: 6877
+
+172.31.76.107:8080     dpNumber: 3   S: 3   L: 3.237.35.222:8080   R: 172.31.69.17:8080   Iter: 6870
+
+172.31.65.185:8080     dpNumber: 2   S: 4   L: 172.31.69.1:8080   R: 172.31.76.107:8080   Iter: 7306
+
 
 
